@@ -4,6 +4,93 @@
 // ==========================================
 
 document.addEventListener('DOMContentLoaded', function() {
+    // ==========================================
+    // パスワード保護機能
+    // ==========================================
+    const PASSWORD = 'chuouniv2025';
+    const passwordScreen = document.getElementById('passwordScreen');
+    const passwordInput = document.getElementById('passwordInput');
+    const passwordSubmit = document.getElementById('passwordSubmit');
+    const passwordError = document.getElementById('passwordError');
+    const mainContent = document.getElementById('mainContent');
+
+    // セッションストレージで認証状態を確認
+    if (sessionStorage.getItem('authenticated') === 'true') {
+        passwordScreen.classList.add('hidden');
+        mainContent.style.display = 'block';
+    } else {
+        mainContent.style.display = 'none';
+    }
+
+    // パスワード検証
+    function checkPassword() {
+        const inputPassword = passwordInput.value;
+        
+        if (inputPassword === PASSWORD) {
+            // 正しいパスワード
+            sessionStorage.setItem('authenticated', 'true');
+            passwordScreen.style.animation = 'fadeOut 0.5s ease-out';
+            
+            setTimeout(() => {
+                passwordScreen.classList.add('hidden');
+                mainContent.style.display = 'block';
+                mainContent.style.animation = 'fadeIn 0.8s ease-out';
+            }, 500);
+            
+            // 成功のパーティクルエフェクト
+            for (let i = 0; i < 50; i++) {
+                const x = window.innerWidth / 2;
+                const y = window.innerHeight / 2;
+                setTimeout(() => {
+                    particles.push(new Particle(x, y));
+                }, i * 10);
+            }
+        } else {
+            // 間違ったパスワード
+            passwordError.textContent = '合言葉が違います。もう一度お試しください。';
+            passwordInput.value = '';
+            passwordInput.style.animation = 'shake 0.5s';
+            
+            setTimeout(() => {
+                passwordInput.style.animation = '';
+                passwordError.textContent = '';
+            }, 2000);
+        }
+    }
+
+    // ボタンクリック
+    passwordSubmit.addEventListener('click', checkPassword);
+
+    // Enterキーで送信
+    passwordInput.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            checkPassword();
+        }
+    });
+
+    // シェイクアニメーション
+    if (!document.getElementById('password-shake-style')) {
+        const style = document.createElement('style');
+        style.id = 'password-shake-style';
+        style.textContent = `
+            @keyframes shake {
+                0%, 100% { transform: translateX(0); }
+                25% { transform: translateX(-10px); }
+                75% { transform: translateX(10px); }
+            }
+            @keyframes fadeOut {
+                to {
+                    opacity: 0;
+                    transform: scale(0.9);
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    }
+
+    // ==========================================
+    // メインコンテンツ（既存のコード）
+    // ==========================================
     // キャンバスの設定
     const canvas = document.getElementById('magicCanvas');
     const ctx = canvas.getContext('2d');

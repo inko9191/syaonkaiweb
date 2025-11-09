@@ -17,6 +17,146 @@ body {
 }
 
 /* ==================== 
+   パスワード保護画面
+   ==================== */
+.password-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.95);
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: fadeIn 0.5s ease-out;
+}
+
+.password-screen.hidden {
+    display: none;
+}
+
+.password-container {
+    background: #f5f5dc;
+    border: 3px solid #000;
+    padding: 60px 50px;
+    text-align: center;
+    box-shadow: 
+        0 0 0 1px #000 inset,
+        0 0 0 8px #f5f5dc inset,
+        0 0 0 10px #000 inset,
+        0 20px 60px rgba(0, 0, 0, 0.5);
+    max-width: 500px;
+    width: 90%;
+    animation: slideDown 0.6s ease-out;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.password-icon {
+    font-size: 4rem;
+    margin-bottom: 20px;
+    animation: bounce 2s infinite;
+}
+
+.password-title {
+    font-family: 'Cinzel Decorative', 'Noto Serif JP', serif;
+    font-size: 2rem;
+    color: #000;
+    margin-bottom: 15px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+}
+
+.password-subtitle {
+    font-size: 1.1rem;
+    color: #8B0000;
+    margin-bottom: 30px;
+    font-weight: 600;
+}
+
+.password-input {
+    width: 100%;
+    padding: 15px 20px;
+    font-size: 1.1rem;
+    border: 3px solid #000;
+    background: #fff;
+    font-family: 'Noto Serif JP', serif;
+    text-align: center;
+    margin-bottom: 20px;
+    box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.password-input:focus {
+    outline: none;
+    border-color: #8B0000;
+    box-shadow: 
+        inset 0 2px 5px rgba(0, 0, 0, 0.1),
+        0 0 0 3px rgba(139, 0, 0, 0.2);
+}
+
+.password-button {
+    width: 100%;
+    padding: 15px 20px;
+    font-size: 1.2rem;
+    font-weight: 700;
+    background: #8B0000;
+    color: #fff;
+    border: 3px solid #000;
+    cursor: pointer;
+    font-family: 'Noto Serif JP', serif;
+    letter-spacing: 0.1em;
+    transition: all 0.3s ease;
+    box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.3);
+}
+
+.password-button:hover {
+    background: #000;
+    transform: translate(-2px, -2px);
+    box-shadow: 5px 5px 0 rgba(139, 0, 0, 0.5);
+}
+
+.password-button:active {
+    transform: translate(0, 0);
+    box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.3);
+}
+
+.password-error {
+    margin-top: 15px;
+    color: #8B0000;
+    font-size: 0.95rem;
+    font-weight: 600;
+    min-height: 20px;
+}
+
+.password-decoration {
+    margin-top: 30px;
+    font-size: 1.5rem;
+    letter-spacing: 15px;
+    color: #8B0000;
+}
+
+.password-decoration::before,
+.password-decoration::after {
+    content: '─────';
+    display: block;
+    font-size: 0.5rem;
+    margin: 10px 0;
+    color: #000;
+}
+
+/* ==================== 
    チェッカーボード背景
    ==================== */
 .vintage-paper {
