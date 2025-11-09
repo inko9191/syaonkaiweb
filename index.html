@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>謝恩会へのご招待 ～不思議の国から～</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Noto+Serif+JP:wght@400;600;900&family=Cinzel+Decorative:wght@400;700;900&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- ビンテージペーパー背景 -->
+    <div class="vintage-paper"></div>
+    
+    <!-- 背景の装飾要素 -->
+    <div class="floating-elements">
+        <div class="playing-card card-spade-1">♠</div>
+        <div class="playing-card card-heart-1">♥</div>
+        <div class="playing-card card-spade-2">♠</div>
+        <div class="playing-card card-heart-2">♥</div>
+        <div class="playing-card card-club-1">♣</div>
+        <div class="rose rose-1">🌹</div>
+        <div class="rose rose-2">🌹</div>
+        <div class="rose rose-3">🌹</div>
+    </div>
+    
+    <!-- 装飾的なコーナー -->
+    <div class="corner-decoration top-left"></div>
+    <div class="corner-decoration top-right"></div>
+    <div class="corner-decoration bottom-left"></div>
+    <div class="corner-decoration bottom-right"></div>
+
+    <!-- メインコンテンツ -->
+    <div class="container">
+        <header class="invitation-header">
+            <div class="header-image-accent"></div>
+            <div class="header-content">
+                <div class="ornamental-line top"></div>
+                <div class="rabbit-icon">🐇</div>
+                <h1 class="main-title">
+                    <span class="title-japanese">夢の入口　旅の始まり</span>
+                    <span class="title-english">Tea Party Adventure</span>
+                </h1>
+                <div class="subtitle">謝恩会へのご招待</div>
+                <div class="ornamental-line bottom"></div>
+            </div>
+        </header>
+
+        <main class="invitation-body">
+            <section class="quote-section">
+                <div class="quote-box">
+                    <p class="quote-text">
+                        不思議の国から<br>
+                        愛と感謝の会を<br>
+                        お届けします
+                    </p>
+                </div>
+            </section>
+
+            <section class="details-section">
+                <div class="card-container">
+                    <div class="info-card">
+                        <div class="card-icon">📅</div>
+                        <h2>日時</h2>
+                        <p class="detail-text">2025年3月1日（土）<br>14:00 入場開始</p>
+                        <div class="divider"></div>
+                    </div>
+
+                    <div class="info-card">
+                        <div class="card-icon">🏰</div>
+                        <h2>場所</h2>
+                        <p class="detail-text">東京プリンスホテル<br>〒105-8560<br>東京都港区芝公園3-3-1</p>
+                        <div class="divider"></div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="message-section">
+                <div class="message-box">
+                    <h3>先生方へ</h3>
+                    <p>
+                        これまで先生方には<br>
+                        たくさんの思い出とご指導をいただきました。<br><br>
+                        不思議の国より、<br>
+                        魔法のようなひとときを<br>
+                        お届けできれば幸いです。<br><br>
+                        心よりお待ちしています
+                    </p>
+                </div>
+            </section>
+        </main>
+
+        <footer class="invitation-footer">
+            <div class="footer-decoration">
+                <span class="deco">♠</span>
+                <span class="deco">♥</span>
+                <span class="deco">♣</span>
+                <span class="deco">♦</span>
+            </div>
+            <p class="footer-text">生徒一同</p>
+        </footer>
+    </div>
+
+    <!-- クリック時のエフェクト用 -->
+    <canvas id="magicCanvas"></canvas>
+
+    <script src="script.js"></script>
+</body>
+</html>
+

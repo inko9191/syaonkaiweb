@@ -1,0 +1,836 @@
+/* ==================== 
+   グローバル設定 - クラシックデザイン
+   ==================== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Noto Serif JP', 'Playfair Display', serif;
+    background: #1a1a1a;
+    min-height: 100vh;
+    overflow-x: hidden;
+    position: relative;
+    color: #2d2d2d;
+}
+
+/* ==================== 
+   チェッカーボード背景
+   ==================== */
+.vintage-paper {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('image.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    z-index: 0;
+}
+
+.vintage-paper::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(245, 245, 220, 0.3);
+    pointer-events: none;
+}
+
+.vintage-paper::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(180deg, 
+        rgba(0, 0, 0, 0.1) 0%, 
+        transparent 20%, 
+        transparent 80%, 
+        rgba(0, 0, 0, 0.15) 100%);
+    pointer-events: none;
+}
+
+/* ==================== 
+   装飾的なコーナー
+   ==================== */
+.corner-decoration {
+    position: fixed;
+    width: 200px;
+    height: 200px;
+    z-index: 5;
+    pointer-events: none;
+}
+
+.corner-decoration::before,
+.corner-decoration::after {
+    content: '';
+    position: absolute;
+    background: #000;
+}
+
+.corner-decoration.top-left {
+    top: 0;
+    left: 0;
+    border-top: 3px solid #000;
+    border-left: 3px solid #000;
+}
+
+.corner-decoration.top-left::before {
+    top: 15px;
+    left: 15px;
+    width: 50px;
+    height: 2px;
+}
+
+.corner-decoration.top-left::after {
+    top: 15px;
+    left: 15px;
+    width: 2px;
+    height: 50px;
+}
+
+.corner-decoration.top-right {
+    top: 0;
+    right: 0;
+    border-top: 3px solid #000;
+    border-right: 3px solid #000;
+}
+
+.corner-decoration.top-right::before {
+    top: 15px;
+    right: 15px;
+    width: 50px;
+    height: 2px;
+}
+
+.corner-decoration.top-right::after {
+    top: 15px;
+    right: 15px;
+    width: 2px;
+    height: 50px;
+}
+
+.corner-decoration.bottom-left {
+    bottom: 0;
+    left: 0;
+    border-bottom: 3px solid #000;
+    border-left: 3px solid #000;
+}
+
+.corner-decoration.bottom-left::before {
+    bottom: 15px;
+    left: 15px;
+    width: 50px;
+    height: 2px;
+}
+
+.corner-decoration.bottom-left::after {
+    bottom: 15px;
+    left: 15px;
+    width: 2px;
+    height: 50px;
+}
+
+.corner-decoration.bottom-right {
+    bottom: 0;
+    right: 0;
+    border-bottom: 3px solid #000;
+    border-right: 3px solid #000;
+}
+
+.corner-decoration.bottom-right::before {
+    bottom: 15px;
+    right: 15px;
+    width: 50px;
+    height: 2px;
+}
+
+.corner-decoration.bottom-right::after {
+    bottom: 15px;
+    right: 15px;
+    width: 2px;
+    height: 50px;
+}
+
+/* ==================== 
+   背景の浮遊要素
+   ==================== */
+.floating-elements {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 2;
+    overflow: hidden;
+}
+
+.playing-card, .rose {
+    position: absolute;
+    font-size: 2.5rem;
+    opacity: 0.15;
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: infinite;
+    filter: drop-shadow(0 0 5px rgba(0, 0, 0, 0.3));
+}
+
+.card-spade-1, .card-club-1 {
+    color: #000;
+}
+
+.card-heart-1, .card-heart-2 {
+    color: #8B0000;
+}
+
+.card-spade-1 {
+    top: 10%;
+    left: 8%;
+    animation: float 8s infinite;
+    transform: rotate(-15deg);
+}
+
+.card-heart-1 {
+    top: 15%;
+    right: 12%;
+    animation: float 10s infinite;
+    transform: rotate(20deg);
+}
+
+.card-spade-2 {
+    bottom: 25%;
+    left: 10%;
+    animation: float 12s infinite;
+    transform: rotate(10deg);
+}
+
+.card-heart-2 {
+    top: 60%;
+    right: 8%;
+    animation: float 9s infinite;
+    transform: rotate(-20deg);
+}
+
+.card-club-1 {
+    bottom: 15%;
+    right: 25%;
+    animation: float 11s infinite;
+    transform: rotate(15deg);
+}
+
+.rose {
+    color: #8B0000;
+    opacity: 0.2;
+}
+
+.rose-1 {
+    top: 30%;
+    left: 15%;
+    animation: float 13s infinite;
+}
+
+.rose-2 {
+    top: 70%;
+    left: 20%;
+    animation: float 15s infinite;
+}
+
+.rose-3 {
+    bottom: 20%;
+    left: 40%;
+    animation: float 14s infinite;
+}
+
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0) rotate(0deg);
+    }
+    50% {
+        transform: translateY(-25px) rotate(5deg);
+    }
+}
+
+/* ==================== 
+   メインコンテナ
+   ==================== */
+.container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 60px 30px;
+    position: relative;
+    z-index: 10;
+}
+
+/* ==================== 
+   ヘッダー - クラシックスタイル
+   ==================== */
+.invitation-header {
+    text-align: center;
+    margin-bottom: 60px;
+    background: rgba(255, 255, 255, 0.95);
+    border: 3px solid #000;
+    box-shadow: 
+        0 0 0 1px #000 inset,
+        0 0 0 8px rgba(255, 255, 255, 0.95) inset,
+        0 0 0 9px #000 inset,
+        0 10px 30px rgba(0, 0, 0, 0.3);
+    position: relative;
+    animation: fadeInDown 1.2s ease-out;
+    overflow: hidden;
+}
+
+.header-image-accent {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 180px;
+    background-image: url('IMG_7693.JPG');
+    background-size: cover;
+    background-position: center 25%;
+    opacity: 0.5;
+    z-index: 0;
+    filter: brightness(1.1);
+}
+
+.header-image-accent::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 100px;
+    background: linear-gradient(to bottom, transparent, rgba(255, 255, 255, 0.95));
+}
+
+.header-content {
+    position: relative;
+    z-index: 1;
+    padding: 50px 40px;
+}
+
+.header-content::before,
+.header-content::after {
+    content: '♠ ♥ ♣';
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 1.5rem;
+    color: #000;
+    letter-spacing: 20px;
+}
+
+.header-content::before {
+    top: 15px;
+}
+
+.header-content::after {
+    bottom: 15px;
+}
+
+.ornamental-line {
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #000, transparent);
+    margin: 20px 0;
+    position: relative;
+}
+
+.ornamental-line::before,
+.ornamental-line::after {
+    content: '◆';
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #8B0000;
+    font-size: 1rem;
+}
+
+.ornamental-line::before {
+    left: 20px;
+}
+
+.ornamental-line::after {
+    right: 20px;
+}
+
+.rabbit-icon {
+    font-size: 4rem;
+    margin: 20px 0;
+    animation: bounce 3s infinite;
+    filter: grayscale(1) contrast(1.2);
+}
+
+@keyframes bounce {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-15px);
+    }
+}
+
+.main-title {
+    font-family: 'Cinzel Decorative', 'Noto Serif JP', serif;
+    margin: 25px 0;
+}
+
+.title-japanese {
+    display: block;
+    font-size: 2.5rem;
+    font-weight: 900;
+    color: #000;
+    letter-spacing: 0.3em;
+    margin-bottom: 15px;
+    text-shadow: 2px 2px 0 rgba(139, 0, 0, 0.2);
+}
+
+.title-english {
+    display: block;
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    font-weight: 700;
+    font-style: italic;
+    color: #2d2d2d;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+}
+
+.subtitle {
+    font-size: 1.4rem;
+    color: #8B0000;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    margin-top: 20px;
+}
+
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-40px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ==================== 
+   メインコンテンツ
+   ==================== */
+.invitation-body {
+    animation: fadeIn 1.5s ease-out 0.5s backwards;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+/* 引用セクション */
+.quote-section {
+    margin-bottom: 50px;
+}
+
+.quote-box {
+    background-image: url('IMG_7695.jpg');
+    background-size: cover;
+    background-position: center;
+    border: 3px solid #000;
+    padding: 60px 40px;
+    text-align: center;
+    box-shadow: 
+        0 0 0 1px #000 inset,
+        0 0 0 8px rgba(255, 255, 255, 0.85) inset,
+        0 0 0 10px #000 inset,
+        5px 5px 0 rgba(0, 0, 0, 0.3);
+    position: relative;
+    overflow: hidden;
+}
+
+.quote-box::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.75);
+    z-index: 0;
+}
+
+.quote-box::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border: 1px solid rgba(139, 0, 0, 0.3);
+    margin: 15px;
+    pointer-events: none;
+    z-index: 2;
+}
+
+.quote-text {
+    font-size: 1.4rem;
+    line-height: 2;
+    color: #2d2d2d;
+    font-weight: 600;
+    position: relative;
+    z-index: 3;
+    text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.8);
+}
+
+/* 詳細情報カード */
+.details-section {
+    margin-bottom: 50px;
+}
+
+.card-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 40px;
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+/* 日時カードに IMG_7698.JPG */
+.info-card:nth-child(1) {
+    background-image: url('IMG_7698.JPG');
+}
+
+/* 場所カードに IMG_7699.jpg */
+.info-card:nth-child(2) {
+    background-image: url('IMG_7699.jpg');
+}
+
+.info-card {
+    background: rgba(255, 255, 255, 0.95);
+    border: 3px double #000;
+    padding: 40px 30px;
+    text-align: center;
+    box-shadow: 5px 5px 0 rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    background-size: cover;
+    background-position: center;
+}
+
+.info-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.88);
+    z-index: 0;
+}
+
+.info-card::after {
+    content: '';
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    right: 10px;
+    bottom: 10px;
+    border: 1px solid #8B0000;
+    pointer-events: none;
+    z-index: 2;
+}
+
+.info-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 
+        8px 8px 0 rgba(0, 0, 0, 0.3),
+        0 0 20px rgba(139, 0, 0, 0.2);
+}
+
+.card-icon {
+    font-size: 3rem;
+    margin-bottom: 20px;
+    filter: grayscale(1);
+    position: relative;
+    z-index: 1;
+}
+
+.info-card h2 {
+    font-family: 'Cinzel Decorative', 'Noto Serif JP', serif;
+    font-size: 1.6rem;
+    color: #000;
+    margin-bottom: 20px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    position: relative;
+    z-index: 1;
+    text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.9);
+}
+
+.detail-text {
+    font-size: 1.1rem;
+    line-height: 1.9;
+    color: #2d2d2d;
+    position: relative;
+    z-index: 1;
+    text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.8);
+}
+
+.divider {
+    height: 2px;
+    width: 80px;
+    background: #8B0000;
+    margin: 25px auto 0;
+    position: relative;
+    z-index: 1;
+}
+
+.divider::before,
+.divider::after {
+    content: '◆';
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #8B0000;
+    font-size: 0.8rem;
+}
+
+.divider::before {
+    left: -15px;
+}
+
+.divider::after {
+    right: -15px;
+}
+
+/* メッセージセクション */
+.message-section {
+    margin-bottom: 50px;
+}
+
+.message-box {
+    background-image: url('IMG_7697.JPG');
+    background-size: cover;
+    background-position: center;
+    border: 3px solid #000;
+    padding: 50px 45px;
+    text-align: center;
+    box-shadow: 
+        0 0 0 1px #000 inset,
+        0 0 0 8px rgba(255, 255, 255, 0.9) inset,
+        0 0 0 10px #000 inset,
+        5px 5px 0 rgba(0, 0, 0, 0.3);
+    position: relative;
+    overflow: hidden;
+}
+
+.message-box::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.85);
+    z-index: 0;
+}
+
+.message-box h3 {
+    font-family: 'Cinzel Decorative', 'Noto Serif JP', serif;
+    font-size: 1.8rem;
+    color: #8B0000;
+    margin-bottom: 30px;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    position: relative;
+    z-index: 1;
+    text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.9);
+}
+
+.message-box p {
+    font-size: 1.15rem;
+    line-height: 2.2;
+    color: #2d2d2d;
+    position: relative;
+    z-index: 1;
+    text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.8);
+}
+
+/* ==================== 
+   フッター
+   ==================== */
+.invitation-footer {
+    text-align: center;
+    padding: 40px 0;
+    animation: fadeIn 2s ease-out 1s backwards;
+}
+
+.footer-decoration {
+    font-size: 2rem;
+    margin-bottom: 20px;
+    letter-spacing: 15px;
+}
+
+.footer-decoration .deco {
+    display: inline-block;
+    animation: suitRotate 6s infinite;
+}
+
+.footer-decoration .deco:nth-child(1),
+.footer-decoration .deco:nth-child(3) {
+    color: #000;
+}
+
+.footer-decoration .deco:nth-child(2),
+.footer-decoration .deco:nth-child(4) {
+    color: #8B0000;
+}
+
+.footer-decoration .deco:nth-child(1) { animation-delay: 0s; }
+.footer-decoration .deco:nth-child(2) { animation-delay: 1.5s; }
+.footer-decoration .deco:nth-child(3) { animation-delay: 3s; }
+.footer-decoration .deco:nth-child(4) { animation-delay: 4.5s; }
+
+@keyframes suitRotate {
+    0%, 100% { 
+        transform: rotate(0deg) scale(1);
+    }
+    50% { 
+        transform: rotate(360deg) scale(1.2);
+    }
+}
+
+.footer-text {
+    font-size: 1.3rem;
+    color: #2d2d2d;
+    font-weight: 600;
+    background: rgba(255, 255, 255, 0.8);
+    padding: 10px 30px;
+    border: 2px solid #000;
+    display: inline-block;
+    letter-spacing: 0.2em;
+}
+
+/* ==================== 
+   マジックキャンバス
+   ==================== */
+#magicCanvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 9999;
+}
+
+/* ==================== 
+   レスポンシブデザイン
+   ==================== */
+@media (max-width: 768px) {
+    .container {
+        padding: 30px 20px;
+    }
+
+    .corner-decoration {
+        width: 100px;
+        height: 100px;
+    }
+
+    .corner-decoration::before {
+        width: 30px !important;
+    }
+
+    .corner-decoration::after {
+        height: 30px !important;
+    }
+
+    .header-image-accent {
+        height: 120px;
+    }
+
+    .header-content {
+        padding: 40px 25px;
+    }
+
+    .title-japanese {
+        font-size: 1.8rem;
+        letter-spacing: 0.2em;
+    }
+
+    .title-english {
+        font-size: 1.4rem;
+    }
+
+    .subtitle {
+        font-size: 1.1rem;
+    }
+
+    .rabbit-icon {
+        font-size: 3rem;
+    }
+
+    .quote-box {
+        padding: 45px 30px;
+    }
+
+    .quote-text {
+        font-size: 1.15rem;
+    }
+
+    .card-container {
+        grid-template-columns: 1fr;
+        max-width: 100%;
+    }
+
+    .message-box {
+        padding: 40px 30px;
+    }
+
+    .message-box h3 {
+        font-size: 1.5rem;
+    }
+
+    .message-box p {
+        font-size: 1.05rem;
+    }
+
+    .playing-card, .rose {
+        font-size: 1.8rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .title-japanese {
+        font-size: 1.5rem;
+    }
+
+    .title-english {
+        font-size: 1.2rem;
+    }
+
+    .quote-text {
+        font-size: 1rem;
+    }
+
+    .message-box p, .detail-text {
+        font-size: 1rem;
+    }
+
+    .info-card h2 {
+        font-size: 1.4rem;
+    }
+}
