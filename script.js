@@ -666,67 +666,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // ==========================================
-    // 1. カスタムカーソルエフェクト
-    // ==========================================
-    const cursor = document.createElement('div');
-    cursor.className = 'custom-cursor';
-    document.body.appendChild(cursor);
-
-    let cursorX = 0, cursorY = 0;
-    let lastTrailTime = 0;
-
-    document.addEventListener('mousemove', (e) => {
-        cursorX = e.clientX;
-        cursorY = e.clientY;
-        cursor.style.left = cursorX - 15 + 'px';
-        cursor.style.top = cursorY - 15 + 'px';
-
-        // 軌跡エフェクト
-        const now = Date.now();
-        if (now - lastTrailTime > 50) {
-            createCursorTrail(cursorX, cursorY);
-            lastTrailTime = now;
-        }
-    });
-
-    document.addEventListener('click', (e) => {
-        createMagicCircle(e.clientX, e.clientY);
-        cursor.style.transform = 'scale(1.5)';
-        setTimeout(() => {
-            cursor.style.transform = 'scale(1)';
-        }, 200);
-    });
-
-    function createCursorTrail(x, y) {
-        const trail = document.createElement('div');
-        trail.className = 'cursor-trail';
-        const symbols = ['✨', '⭐', '💫', '♠', '♥', '♣', '♦'];
-        trail.textContent = symbols[Math.floor(Math.random() * symbols.length)];
-        trail.style.left = x + 'px';
-        trail.style.top = y + 'px';
-        trail.style.fontSize = (Math.random() * 10 + 10) + 'px';
-        document.body.appendChild(trail);
-
-        setTimeout(() => trail.remove(), 800);
-    }
-
-    function createMagicCircle(x, y) {
-        const circle = document.createElement('div');
-        circle.className = 'magic-circle';
-        circle.style.left = (x - 100) + 'px';
-        circle.style.top = (y - 100) + 'px';
-        circle.style.width = '0';
-        circle.style.height = '0';
-        circle.style.border = '3px solid rgba(255, 215, 0, 0.8)';
-        circle.style.borderRadius = '50%';
-        circle.style.boxShadow = '0 0 30px rgba(255, 215, 0, 0.6), inset 0 0 30px rgba(255, 215, 0, 0.4)';
-        document.body.appendChild(circle);
-
-        setTimeout(() => circle.remove(), 1000);
-    }
-
-    // ==========================================
-    // 2. パララックス効果
+    // パララックス効果
     // ==========================================
     const parallaxElements = document.querySelectorAll('.info-card, .message-box, .quote-box, .invitation-header');
     
@@ -748,7 +688,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // ==========================================
-    // 3. 花びら・トランプカードが降ってくる
+    // 花びら・トランプカードが降ってくる
     // ==========================================
     function createFallingItems() {
         setInterval(() => {
@@ -778,7 +718,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }, 1000);
 
     // ==========================================
-    // 4. セクション登場時のド派手なアニメーション
+    // セクション登場時のド派手なアニメーション
     // ==========================================
     const revealSections = document.querySelectorAll('.info-card, .message-box, .quote-box');
     
