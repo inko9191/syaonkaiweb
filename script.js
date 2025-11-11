@@ -77,7 +77,7 @@ document.addEventListener('DOMContentLoaded', function() {
         // ウサギが逃げ終わったら落下エフェクト
         setTimeout(() => {
             showFallingAnimation();
-        }, 2000);
+        }, 3000);
     }
 
     // 落下エフェクト
