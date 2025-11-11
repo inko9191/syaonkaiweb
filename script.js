@@ -49,6 +49,7 @@ document.addEventListener('DOMContentLoaded', function() {
     function showDoorAnimation() {
         const doorAnimation = document.getElementById('doorAnimation');
         const doorContainer = doorAnimation.querySelector('.door-container');
+        const innerWorld = doorContainer.querySelector('.door-inner-world');
         
         // パスワード画面をフェードアウト
         passwordScreen.style.animation = 'fadeOut 0.5s ease-out';
@@ -60,6 +61,9 @@ document.addEventListener('DOMContentLoaded', function() {
             // ドアを開く
             setTimeout(() => {
                 doorContainer.classList.add('opening');
+                
+                // キラキラエフェクトを追加
+                createSparkles(innerWorld);
             }, 500);
             
             // ドアが開いたらウサギアニメーション開始
@@ -67,6 +71,25 @@ document.addEventListener('DOMContentLoaded', function() {
                 showRabbitAnimation();
             }, 3500);
         }, 500);
+    }
+    
+    // キラキラエフェクトを生成
+    function createSparkles(container) {
+        for (let i = 0; i < 50; i++) {
+            setTimeout(() => {
+                const sparkle = document.createElement('div');
+                sparkle.className = 'sparkle';
+                sparkle.style.left = Math.random() * 100 + '%';
+                sparkle.style.bottom = '0';
+                sparkle.style.animationDelay = Math.random() * 2 + 's';
+                sparkle.style.animationDuration = (Math.random() * 2 + 2) + 's';
+                container.appendChild(sparkle);
+                
+                setTimeout(() => {
+                    sparkle.remove();
+                }, 5000);
+            }, i * 50);
+        }
     }
 
     // ウサギアニメーション
