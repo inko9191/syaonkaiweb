@@ -8,6 +8,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Noto+Serif+JP:wght@400;600;900&family=Cinzel+Decorative:wght@400;700;900&display=swap" rel="stylesheet">
+    <!-- Three.js CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r160/three.min.js"></script>
 </head>
 <body>
     <!-- パスワード保護画面 -->
@@ -114,6 +116,40 @@
             <p class="footer-text">生徒一同</p>
         </footer>
     </div>
+
+    <!-- ドアアニメーション -->
+    <div id="doorAnimation" class="door-animation hidden">
+        <div class="door-container">
+            <div class="door-left"></div>
+            <div class="door-right"></div>
+            <div class="door-frame"></div>
+        </div>
+    </div>
+
+    <!-- 白ウサギアニメーション -->
+    <div id="rabbitAnimation" class="rabbit-animation hidden">
+        <div class="white-rabbit">
+            <div class="rabbit-body">
+                <div class="rabbit-ear left"></div>
+                <div class="rabbit-ear right"></div>
+                <div class="rabbit-face">
+                    <div class="rabbit-eye left"></div>
+                    <div class="rabbit-eye right"></div>
+                    <div class="rabbit-nose"></div>
+                </div>
+            </div>
+            <div class="rabbit-speech">遅刻する！遅刻する！</div>
+        </div>
+    </div>
+
+    <!-- 落下エフェクト -->
+    <div id="fallingEffect" class="falling-effect hidden">
+        <div class="hole-spiral"></div>
+        <div class="hole-center"></div>
+    </div>
+
+    <!-- Three.js用キャンバス -->
+    <canvas id="threeCanvas"></canvas>
 
     <!-- クリック時のエフェクト用 -->
     <canvas id="magicCanvas"></canvas>

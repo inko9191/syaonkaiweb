@@ -29,22 +29,9 @@ document.addEventListener('DOMContentLoaded', function() {
         if (inputPassword === PASSWORD) {
             // 正しいパスワード
             sessionStorage.setItem('authenticated', 'true');
-            passwordScreen.style.animation = 'fadeOut 0.5s ease-out';
             
-            setTimeout(() => {
-                passwordScreen.classList.add('hidden');
-                mainContent.style.display = 'block';
-                mainContent.style.animation = 'fadeIn 0.8s ease-out';
-            }, 500);
-            
-            // 成功のパーティクルエフェクト
-            for (let i = 0; i < 50; i++) {
-                const x = window.innerWidth / 2;
-                const y = window.innerHeight / 2;
-                setTimeout(() => {
-                    particles.push(new Particle(x, y));
-                }, i * 10);
-            }
+            // ドア→ウサギ→落下のシーケンスを開始
+            showDoorAnimation();
         } else {
             // 間違ったパスワード
             passwordError.textContent = '合言葉が違います。もう一度お試しください。';
@@ -56,6 +43,68 @@ document.addEventListener('DOMContentLoaded', function() {
                 passwordError.textContent = '';
             }, 2000);
         }
+    }
+
+    // ドアアニメーション
+    function showDoorAnimation() {
+        const doorAnimation = document.getElementById('doorAnimation');
+        const doorContainer = doorAnimation.querySelector('.door-container');
+        
+        // パスワード画面をフェードアウト
+        passwordScreen.style.animation = 'fadeOut 0.5s ease-out';
+        
+        setTimeout(() => {
+            passwordScreen.classList.add('hidden');
+            doorAnimation.classList.remove('hidden');
+            
+            // ドアを開く
+            setTimeout(() => {
+                doorContainer.classList.add('opening');
+            }, 500);
+            
+            // ドアが開いたらウサギアニメーション開始
+            setTimeout(() => {
+                showRabbitAnimation();
+            }, 3500);
+        }, 500);
+    }
+
+    // ウサギアニメーション
+    function showRabbitAnimation() {
+        const rabbitAnimation = document.getElementById('rabbitAnimation');
+        rabbitAnimation.classList.remove('hidden');
+        
+        // ウサギが逃げ終わったら落下エフェクト
+        setTimeout(() => {
+            showFallingAnimation();
+        }, 2000);
+    }
+
+    // 落下エフェクト
+    function showFallingAnimation() {
+        const fallingEffect = document.getElementById('fallingEffect');
+        const doorAnimation = document.getElementById('doorAnimation');
+        const rabbitAnimation = document.getElementById('rabbitAnimation');
+        
+        fallingEffect.classList.remove('hidden');
+        
+        // ドアとウサギを非表示
+        setTimeout(() => {
+            doorAnimation.classList.add('hidden');
+            rabbitAnimation.classList.add('hidden');
+        }, 500);
+        
+        // 落下が終わったらメインコンテンツ表示
+        setTimeout(() => {
+            fallingEffect.classList.add('hidden');
+            mainContent.style.display = 'block';
+            mainContent.style.opacity = '0';
+            mainContent.style.animation = 'fadeIn 1.5s ease-out forwards';
+            
+            // Three.jsとダンシングウサギを初期化
+            initThreeJS();
+            addDancingRabbits();
+        }, 3000);
     }
 
     // ボタンクリック
@@ -377,6 +426,221 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     });
+
+    // ==========================================
+    // Three.js 3D演出
+    // ==========================================
+    let threeScene, threeCamera, threeRenderer;
+    let rabbits3D = [];
+    let cards3D = [];
+
+    function initThreeJS() {
+        const threeCanvas = document.getElementById('threeCanvas');
+        
+        // シーン作成
+        threeScene = new THREE.Scene();
+        
+        // カメラ作成
+        threeCamera = new THREE.PerspectiveCamera(
+            75,
+            window.innerWidth / window.innerHeight,
+            0.1,
+            1000
+        );
+        threeCamera.position.z = 5;
+        
+        // レンダラー作成
+        threeRenderer = new THREE.WebGLRenderer({
+            canvas: threeCanvas,
+            alpha: true,
+            antialias: true
+        });
+        threeRenderer.setSize(window.innerWidth, window.innerHeight);
+        threeRenderer.setClearColor(0x000000, 0);
+        
+        // ライト
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+        threeScene.add(ambientLight);
+        
+        const pointLight = new THREE.PointLight(0xffffff, 0.8);
+        pointLight.position.set(5, 5, 5);
+        threeScene.add(pointLight);
+        
+        // 3Dウサギを作成
+        create3DRabbits();
+        
+        // 3Dトランプカードを作成
+        create3DCards();
+        
+        // アニメーション開始
+        animateThreeJS();
+        
+        // ウィンドウリサイズ対応
+        window.addEventListener('resize', () => {
+            threeCamera.aspect = window.innerWidth / window.innerHeight;
+            threeCamera.updateProjectionMatrix();
+            threeRenderer.setSize(window.innerWidth, window.innerHeight);
+        });
+    }
+    
+    function create3DRabbits() {
+        // 3Dウサギを5体作成
+        for (let i = 0; i < 5; i++) {
+            const rabbitGroup = new THREE.Group();
+            
+            // 体
+            const bodyGeometry = new THREE.SphereGeometry(0.3, 16, 16);
+            const bodyMaterial = new THREE.MeshPhongMaterial({ 
+                color: 0xffffff,
+                shininess: 30
+            });
+            const body = new THREE.Mesh(bodyGeometry, bodyMaterial);
+            body.scale.set(1, 1.3, 1);
+            rabbitGroup.add(body);
+            
+            // 頭
+            const headGeometry = new THREE.SphereGeometry(0.25, 16, 16);
+            const head = new THREE.Mesh(headGeometry, bodyMaterial);
+            head.position.y = 0.5;
+            rabbitGroup.add(head);
+            
+            // 耳（左）
+            const earGeometry = new THREE.CylinderGeometry(0.05, 0.08, 0.5, 8);
+            const leftEar = new THREE.Mesh(earGeometry, bodyMaterial);
+            leftEar.position.set(-0.15, 0.8, 0);
+            leftEar.rotation.z = -0.2;
+            rabbitGroup.add(leftEar);
+            
+            // 耳（右）
+            const rightEar = new THREE.Mesh(earGeometry, bodyMaterial);
+            rightEar.position.set(0.15, 0.8, 0);
+            rightEar.rotation.z = 0.2;
+            rabbitGroup.add(rightEar);
+            
+            // 位置をランダムに配置
+            rabbitGroup.position.set(
+                (Math.random() - 0.5) * 8,
+                (Math.random() - 0.5) * 6,
+                (Math.random() - 0.5) * 4
+            );
+            
+            // ランダムな回転
+            rabbitGroup.rotation.y = Math.random() * Math.PI * 2;
+            
+            threeScene.add(rabbitGroup);
+            rabbits3D.push({
+                group: rabbitGroup,
+                speedX: (Math.random() - 0.5) * 0.02,
+                speedY: (Math.random() - 0.5) * 0.02,
+                rotationSpeed: (Math.random() - 0.5) * 0.05,
+                bounceOffset: Math.random() * Math.PI * 2
+            });
+        }
+    }
+    
+    function create3DCards() {
+        // トランプカードの形状（平面）
+        const cardGeometry = new THREE.PlaneGeometry(0.4, 0.6);
+        const suits = [
+            { color: 0x000000, symbol: '♠' },
+            { color: 0x8B0000, symbol: '♥' },
+            { color: 0x000000, symbol: '♣' },
+            { color: 0x8B0000, symbol: '♦' }
+        ];
+        
+        for (let i = 0; i < 8; i++) {
+            const suit = suits[i % suits.length];
+            const cardMaterial = new THREE.MeshPhongMaterial({ 
+                color: 0xffffff,
+                side: THREE.DoubleSide
+            });
+            const card = new THREE.Mesh(cardGeometry, cardMaterial);
+            
+            card.position.set(
+                (Math.random() - 0.5) * 10,
+                (Math.random() - 0.5) * 8,
+                (Math.random() - 0.5) * 3
+            );
+            
+            threeScene.add(card);
+            cards3D.push({
+                mesh: card,
+                speedX: (Math.random() - 0.5) * 0.015,
+                speedY: (Math.random() - 0.5) * 0.015,
+                rotationSpeedX: (Math.random() - 0.5) * 0.08,
+                rotationSpeedY: (Math.random() - 0.5) * 0.08
+            });
+        }
+    }
+    
+    function animateThreeJS() {
+        requestAnimationFrame(animateThreeJS);
+        
+        const time = Date.now() * 0.001;
+        
+        // ウサギのアニメーション
+        rabbits3D.forEach((rabbit) => {
+            // 移動
+            rabbit.group.position.x += rabbit.speedX;
+            rabbit.group.position.y += rabbit.speedY;
+            
+            // バウンス（上下運動）
+            rabbit.group.position.y += Math.sin(time * 2 + rabbit.bounceOffset) * 0.01;
+            
+            // 回転
+            rabbit.group.rotation.y += rabbit.rotationSpeed;
+            
+            // 画面外に出たら反対側から出現
+            if (rabbit.group.position.x > 5) rabbit.group.position.x = -5;
+            if (rabbit.group.position.x < -5) rabbit.group.position.x = 5;
+            if (rabbit.group.position.y > 4) rabbit.group.position.y = -4;
+            if (rabbit.group.position.y < -4) rabbit.group.position.y = 4;
+        });
+        
+        // カードのアニメーション
+        cards3D.forEach((card) => {
+            // 移動
+            card.mesh.position.x += card.speedX;
+            card.mesh.position.y += card.speedY;
+            
+            // 回転
+            card.mesh.rotation.x += card.rotationSpeedX;
+            card.mesh.rotation.y += card.rotationSpeedY;
+            
+            // 画面外に出たら反対側から出現
+            if (card.mesh.position.x > 6) card.mesh.position.x = -6;
+            if (card.mesh.position.x < -6) card.mesh.position.x = 6;
+            if (card.mesh.position.y > 5) card.mesh.position.y = -5;
+            if (card.mesh.position.y < -5) card.mesh.position.y = 5;
+        });
+        
+        threeRenderer.render(threeScene, threeCamera);
+    }
+
+    // ==========================================
+    // ダンシングウサギ（CSS）
+    // ==========================================
+    function addDancingRabbits() {
+        const positions = [
+            { class: 'dancing-rabbit-1', top: '15%', left: '5%' },
+            { class: 'dancing-rabbit-2', top: '25%', right: '8%' },
+            { class: 'dancing-rabbit-3', bottom: '20%', left: '10%' }
+        ];
+        
+        positions.forEach((pos) => {
+            const rabbit = document.createElement('div');
+            rabbit.className = `dancing-rabbit ${pos.class}`;
+            
+            rabbit.innerHTML = `
+                <div class="mini-rabbit">
+                    <div class="mini-ear left"></div>
+                    <div class="mini-ear right"></div>
+                </div>
+            `;
+            
+            document.body.appendChild(rabbit);
+        });
+    }
 
     console.log('%c🎩 Welcome to Wonderland 🐇', 'font-size: 18px; color: #8B0000; font-weight: bold; background: #f5f5dc; padding: 10px;');
     console.log('%c隠しコマンド: ↑↑↓↓ で白ウサギが登場！', 'font-size: 14px; color: #2d2d2d;');
