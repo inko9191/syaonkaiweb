@@ -500,6 +500,38 @@ body {
         2px 2px 5px rgba(139, 0, 0, 0.2);
 }
 
+/* スマホ対応 - ウサギのセリフを中央に */
+@media (max-width: 768px) {
+    .white-rabbit {
+        transform: translate(-50%, -50%) scale(1.2);
+    }
+    
+    .rabbit-speech {
+        top: -80px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 1rem;
+        padding: 8px 15px;
+        white-space: normal;
+        max-width: 70vw;
+        text-align: center;
+    }
+    
+    .rabbit-speech::after {
+        left: 50%;
+        top: auto;
+        bottom: -15px;
+        transform: translateX(-50%) rotate(90deg);
+    }
+    
+    .rabbit-speech::before {
+        left: 50%;
+        top: auto;
+        bottom: -10px;
+        transform: translateX(-50%) rotate(90deg);
+    }
+}
+
 .rabbit-speech::after {
     content: '';
     position: absolute;
