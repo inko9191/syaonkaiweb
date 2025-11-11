@@ -169,7 +169,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    background: rgba(0, 0, 0, 0.95);
+    background: radial-gradient(circle, rgba(255, 255, 220, 0.95) 0%, rgba(200, 180, 150, 0.9) 50%, rgba(139, 100, 69, 0.85) 100%);
 }
 
 .door-animation.hidden {
@@ -181,6 +181,9 @@ body {
     width: 600px;
     height: 800px;
     perspective: 1500px;
+    filter: 
+        drop-shadow(0 0 50px rgba(255, 215, 0, 0.6))
+        brightness(1.1);
 }
 
 .door-frame {
@@ -191,10 +194,12 @@ body {
     height: 100%;
     border: 10px solid #8B4513;
     box-shadow: 
-        0 0 30px rgba(139, 69, 19, 0.5),
-        inset 0 0 50px rgba(0, 0, 0, 0.5);
+        0 0 50px rgba(255, 215, 0, 0.8),
+        inset 0 0 30px rgba(255, 255, 255, 0.3),
+        inset 0 0 80px rgba(255, 255, 220, 0.5);
     pointer-events: none;
     z-index: 3;
+    background: radial-gradient(circle, rgba(255, 255, 240, 0.8) 0%, rgba(255, 245, 200, 0.6) 50%, transparent 100%);
 }
 
 .door-left, .door-right {
@@ -202,10 +207,13 @@ body {
     top: 0;
     width: 50%;
     height: 100%;
-    background: linear-gradient(to right, #654321, #8B4513, #654321);
-    border: 3px solid #000;
+    background: linear-gradient(145deg, #8B6F47, #A0826D, #8B6F47);
+    border: 4px solid #000;
     transform-origin: left center;
     transition: transform 3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    box-shadow: 
+        inset 10px 10px 30px rgba(255, 255, 255, 0.2),
+        inset -10px -10px 30px rgba(0, 0, 0, 0.3);
 }
 
 .door-left {
