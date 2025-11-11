@@ -14,6 +14,7 @@ body {
     overflow-x: hidden;
     position: relative;
     color: #2d2d2d;
+    cursor: none;
 }
 
 /* ==================== 
@@ -701,6 +702,153 @@ body {
     bottom: 20%;
     left: 10%;
     animation-delay: 2s;
+}
+
+/* ==================== 
+   1. カスタムカーソル
+   ==================== */
+.custom-cursor {
+    position: fixed;
+    width: 30px;
+    height: 30px;
+    border: 3px solid #ffd700;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 20000;
+    transition: transform 0.1s ease;
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.6);
+}
+
+.cursor-trail {
+    position: fixed;
+    width: 10px;
+    height: 10px;
+    pointer-events: none;
+    z-index: 19999;
+    animation: cursorTrailFade 0.8s ease-out forwards;
+}
+
+@keyframes cursorTrailFade {
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    100% {
+        transform: scale(0);
+        opacity: 0;
+    }
+}
+
+.magic-circle {
+    position: fixed;
+    pointer-events: none;
+    z-index: 19998;
+    animation: magicCircleExpand 1s ease-out forwards;
+}
+
+@keyframes magicCircleExpand {
+    0% {
+        width: 0;
+        height: 0;
+        opacity: 1;
+    }
+    100% {
+        width: 200px;
+        height: 200px;
+        opacity: 0;
+    }
+}
+
+/* ==================== 
+   3. 降ってくる要素
+   ==================== */
+.falling-item {
+    position: fixed;
+    top: -100px;
+    pointer-events: none;
+    z-index: 50;
+    animation: fall linear forwards;
+}
+
+@keyframes fall {
+    to {
+        transform: translateY(calc(100vh + 100px)) rotate(360deg);
+        opacity: 0;
+    }
+}
+
+.petal {
+    font-size: 30px;
+    animation: petalFloat 8s linear forwards;
+}
+
+@keyframes petalFloat {
+    0% {
+        transform: translateY(0) rotate(0deg) translateX(0);
+    }
+    25% {
+        transform: translateY(25vh) rotate(90deg) translateX(30px);
+    }
+    50% {
+        transform: translateY(50vh) rotate(180deg) translateX(-30px);
+    }
+    75% {
+        transform: translateY(75vh) rotate(270deg) translateX(30px);
+    }
+    100% {
+        transform: translateY(100vh) rotate(360deg) translateX(0);
+        opacity: 0;
+    }
+}
+
+/* ==================== 
+   4. セクション登場アニメーション
+   ==================== */
+.section-reveal {
+    opacity: 0;
+    transform: perspective(1000px) rotateX(-20deg) translateY(50px);
+    transition: all 1s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.section-reveal.revealed {
+    opacity: 1;
+    transform: perspective(1000px) rotateX(0) translateY(0);
+}
+
+.explosion-effect {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 10px;
+    height: 10px;
+    pointer-events: none;
+}
+
+.explosion-particle {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    background: radial-gradient(circle, #ffd700, #ff69b4);
+    border-radius: 50%;
+    animation: explode 1s ease-out forwards;
+}
+
+@keyframes explode {
+    0% {
+        transform: translate(0, 0) scale(1);
+        opacity: 1;
+    }
+    100% {
+        transform: translate(var(--tx), var(--ty)) scale(0);
+        opacity: 0;
+    }
+}
+
+/* ==================== 
+   2. パララックス効果
+   ==================== */
+.parallax-layer {
+    transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
 /* ==================== 

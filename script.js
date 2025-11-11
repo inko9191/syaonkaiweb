@@ -665,6 +665,181 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
+    // ==========================================
+    // 1. カスタムカーソルエフェクト
+    // ==========================================
+    const cursor = document.createElement('div');
+    cursor.className = 'custom-cursor';
+    document.body.appendChild(cursor);
+
+    let cursorX = 0, cursorY = 0;
+    let lastTrailTime = 0;
+
+    document.addEventListener('mousemove', (e) => {
+        cursorX = e.clientX;
+        cursorY = e.clientY;
+        cursor.style.left = cursorX - 15 + 'px';
+        cursor.style.top = cursorY - 15 + 'px';
+
+        // 軌跡エフェクト
+        const now = Date.now();
+        if (now - lastTrailTime > 50) {
+            createCursorTrail(cursorX, cursorY);
+            lastTrailTime = now;
+        }
+    });
+
+    document.addEventListener('click', (e) => {
+        createMagicCircle(e.clientX, e.clientY);
+        cursor.style.transform = 'scale(1.5)';
+        setTimeout(() => {
+            cursor.style.transform = 'scale(1)';
+        }, 200);
+    });
+
+    function createCursorTrail(x, y) {
+        const trail = document.createElement('div');
+        trail.className = 'cursor-trail';
+        const symbols = ['✨', '⭐', '💫', '♠', '♥', '♣', '♦'];
+        trail.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+        trail.style.left = x + 'px';
+        trail.style.top = y + 'px';
+        trail.style.fontSize = (Math.random() * 10 + 10) + 'px';
+        document.body.appendChild(trail);
+
+        setTimeout(() => trail.remove(), 800);
+    }
+
+    function createMagicCircle(x, y) {
+        const circle = document.createElement('div');
+        circle.className = 'magic-circle';
+        circle.style.left = (x - 100) + 'px';
+        circle.style.top = (y - 100) + 'px';
+        circle.style.width = '0';
+        circle.style.height = '0';
+        circle.style.border = '3px solid rgba(255, 215, 0, 0.8)';
+        circle.style.borderRadius = '50%';
+        circle.style.boxShadow = '0 0 30px rgba(255, 215, 0, 0.6), inset 0 0 30px rgba(255, 215, 0, 0.4)';
+        document.body.appendChild(circle);
+
+        setTimeout(() => circle.remove(), 1000);
+    }
+
+    // ==========================================
+    // 2. パララックス効果
+    // ==========================================
+    const parallaxElements = document.querySelectorAll('.info-card, .message-box, .quote-box, .invitation-header');
+    
+    parallaxElements.forEach(el => {
+        el.classList.add('parallax-layer');
+    });
+
+    window.addEventListener('scroll', () => {
+        const scrolled = window.pageYOffset;
+        
+        parallaxElements.forEach((el, index) => {
+            const speed = (index % 3 + 1) * 0.1;
+            const yPos = -(scrolled * speed);
+            el.style.transform = `translateY(${yPos}px)`;
+        });
+
+        // 背景もゆっくり動かす
+        document.querySelector('.vintage-paper').style.transform = `translateY(${scrolled * 0.3}px)`;
+    });
+
+    // ==========================================
+    // 3. 花びら・トランプカードが降ってくる
+    // ==========================================
+    function createFallingItems() {
+        setInterval(() => {
+            const item = document.createElement('div');
+            item.className = 'falling-item petal';
+            
+            const items = ['🌹', '🌸', '♠', '♥', '♣', '♦', '⭐', '✨'];
+            item.textContent = items[Math.floor(Math.random() * items.length)];
+            
+            item.style.left = Math.random() * 100 + '%';
+            item.style.animationDuration = (Math.random() * 5 + 5) + 's';
+            item.style.fontSize = (Math.random() * 20 + 20) + 'px';
+            
+            document.body.appendChild(item);
+            
+            setTimeout(() => item.remove(), 10000);
+        }, 500);
+    }
+
+    // メインコンテンツ表示後に開始
+    setTimeout(() => {
+        if (!document.getElementById('passwordScreen').classList.contains('hidden')) {
+            // パスワード入力後に開始
+        } else {
+            createFallingItems();
+        }
+    }, 1000);
+
+    // ==========================================
+    // 4. セクション登場時のド派手なアニメーション
+    // ==========================================
+    const revealSections = document.querySelectorAll('.info-card, .message-box, .quote-box');
+    
+    revealSections.forEach(section => {
+        section.classList.add('section-reveal');
+    });
+
+    const revealObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('revealed');
+                
+                // 爆発エフェクト
+                createExplosion(entry.target);
+                
+                revealObserver.unobserve(entry.target);
+            }
+        });
+    }, {
+        threshold: 0.2,
+        rootMargin: '0px'
+    });
+
+    revealSections.forEach(section => {
+        revealObserver.observe(section);
+    });
+
+    function createExplosion(element) {
+        const rect = element.getBoundingClientRect();
+        const centerX = rect.left + rect.width / 2;
+        const centerY = rect.top + rect.height / 2;
+        
+        for (let i = 0; i < 30; i++) {
+            const particle = document.createElement('div');
+            particle.className = 'explosion-particle';
+            particle.style.left = centerX + 'px';
+            particle.style.top = centerY + 'px';
+            
+            const angle = (Math.PI * 2 * i) / 30;
+            const velocity = Math.random() * 100 + 50;
+            const tx = Math.cos(angle) * velocity;
+            const ty = Math.sin(angle) * velocity;
+            
+            particle.style.setProperty('--tx', tx + 'px');
+            particle.style.setProperty('--ty', ty + 'px');
+            
+            document.body.appendChild(particle);
+            
+            setTimeout(() => particle.remove(), 1000);
+        }
+    }
+
+    // 花びらエフェクトをパスワード解除後に開始
+    const originalShowFalling = showFallingAnimation;
+    showFallingAnimation = function() {
+        originalShowFalling();
+        setTimeout(() => {
+            createFallingItems();
+        }, 3000);
+    };
+
     console.log('%c🎩 Welcome to Wonderland 🐇', 'font-size: 18px; color: #8B0000; font-weight: bold; background: #f5f5dc; padding: 10px;');
     console.log('%c隠しコマンド: ↑↑↓↓ で白ウサギが登場！', 'font-size: 14px; color: #2d2d2d;');
 });
