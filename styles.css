@@ -269,6 +269,11 @@ body {
     z-index: 1; /* ノブを画像の上に表示 */
 }
 
+/* 画像ドア時は外枠を消す */
+.image-doors .door-frame {
+    display: none;
+}
+
 .door-container.opening .door-left {
     transform: rotateY(-120deg);
 }
