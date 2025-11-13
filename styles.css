@@ -203,10 +203,6 @@ body {
     width: 50%;
     height: 100%;
     background: linear-gradient(to right, #654321, #8B4513, #654321);
-    /* 画像ドア（door.jpg）に差し替え。gradientはフォールバック */
-    background-image: url('door.jpg');
-    background-size: 200% 100%;
-    background-repeat: no-repeat;
     border: 3px solid #000;
     transform-origin: left center;
     transition: transform 3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
@@ -215,13 +211,11 @@ body {
 .door-left {
     left: 0;
     transform-origin: left center;
-    background-position: left center;
 }
 
 .door-right {
     right: 0;
     transform-origin: right center;
-    background-position: right center;
 }
 
 .door-left::before, .door-right::before {
@@ -242,6 +236,37 @@ body {
 
 .door-right::before {
     left: 20px;
+}
+
+/* 画像ドア対応（door.jpeg を片面として使用。右扉は水平反転） */
+.image-doors .door-left,
+.image-doors .door-right {
+    background: none;
+    overflow: hidden;
+}
+
+.image-doors .door-left::after,
+.image-doors .door-right::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('door.jpeg');
+    background-size: cover;
+    background-position: center;
+    z-index: 0; /* ノブ(::before)より背面 */
+}
+
+.image-doors .door-right::after {
+    transform: scaleX(-1); /* 片面画像を水平反転して右扉に流用 */
+    transform-origin: center;
+}
+
+.image-doors .door-left::before,
+.image-doors .door-right::before {
+    z-index: 1; /* ノブを画像の上に表示 */
 }
 
 .door-container.opening .door-left {
