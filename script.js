@@ -389,7 +389,7 @@ document.addEventListener('DOMContentLoaded', function() {
         
         rabbitAlert.innerHTML = `
             <div style="margin-bottom: 15px;">
-                <img src="rabbit.png" alt="走るウサギ" style="width: 180px; height: auto; display: block; margin: 0 auto; filter: drop-shadow(0 6px 12px rgba(0,0,0,0.6));" />
+                <img src="rabbit.png" alt="走るウサギ" style="width: 180px; height: auto; display: block; margin: 0 auto; filter: drop-shadow(0 6px 12px rgba(0,0,0,0.6)); animation: rabbit-bounce 0.8s ease-in-out infinite alternate;" />
             </div>
             <p style="font-family: 'Noto Serif JP', serif; font-weight: 700; letter-spacing: 0.2em;">
                 遅刻する！遅刻する！<br>
@@ -423,6 +423,18 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             `;
             document.head.appendChild(style);
+        }
+        // ウサギ画像の上下バウンス
+        if (!document.getElementById('rabbit-bounce-style')) {
+            const bounceStyle = document.createElement('style');
+            bounceStyle.id = 'rabbit-bounce-style';
+            bounceStyle.textContent = `
+                @keyframes rabbit-bounce {
+                    0% { transform: translateY(0); }
+                    100% { transform: translateY(-14px); }
+                }
+            `;
+            document.head.appendChild(bounceStyle);
         }
         
         // 大量のトランプカード
