@@ -63,16 +63,6 @@
         </header>
 
         <main class="invitation-body">
-            <!-- 本のページめくりセクション -->
-            <section id="book" aria-label="招待の本">
-                <div class="book">
-                    <div class="page cover front"></div>
-                    <div class="page" data-i="1"></div>
-                    <div class="page" data-i="2"></div>
-                    <div class="page cover back"></div>
-                </div>
-            </section>
-            
             <section class="quote-section">
                 <div class="quote-box">
                     <p class="quote-text">
@@ -135,18 +125,6 @@
                 <div class="magic-ring"></div>
                 <div class="magic-ring"></div>
             </div>
-            <!-- 鍵穴 -->
-            <svg class="keyhole" viewBox="0 0 100 160" aria-hidden="true">
-                <path d="M50 10
-                         C25 10, 10 30, 10 50
-                         C10 75, 30 90, 40 95
-                         L35 140
-                         C35 150, 65 150, 65 140
-                         L60 95
-                         C70 90, 90 75, 90 50
-                         C90 30, 75 10, 50 10 Z"
-                      fill="#111"/>
-            </svg>
             <div class="door-left"></div>
             <div class="door-right"></div>
             <div class="door-frame"></div>
@@ -156,15 +134,7 @@
     <!-- 白ウサギアニメーション -->
     <div id="rabbitAnimation" class="rabbit-animation hidden">
         <div class="white-rabbit">
-            <div class="rabbit-body">
-                <div class="rabbit-ear left"></div>
-                <div class="rabbit-ear right"></div>
-                <div class="rabbit-face">
-                    <div class="rabbit-eye left"></div>
-                    <div class="rabbit-eye right"></div>
-                    <div class="rabbit-nose"></div>
-                </div>
-            </div>
+            <img class="rabbit-image" src="rabbit.png" alt="白ウサギが走っている様子">
             <div class="rabbit-speech">遅刻する！遅刻する！</div>
         </div>
     </div>
@@ -174,9 +144,6 @@
         <div class="hole-spiral"></div>
         <div class="hole-center"></div>
     </div>
-
-    <!-- ウサギ横切り用 WebGL キャンバス -->
-    <canvas id="rabbitCanvas" class="rabbit-canvas hidden"></canvas>
 
     <!-- Three.js用キャンバス -->
     <canvas id="threeCanvas"></canvas>
