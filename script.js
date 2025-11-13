@@ -66,9 +66,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 createSparkles(innerWorld);
             }, 500);
             
-            // ドアが開いたらウサギアニメーション開始
+            // ドアが開いたら“リアルウサギの横切り”を開始
             setTimeout(() => {
-                showRabbitAnimation();
+                runRabbitCrossingOnce();
             }, 3500);
         }, 500);
     }
@@ -92,15 +92,170 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    // ウサギアニメーション
-    function showRabbitAnimation() {
-        const rabbitAnimation = document.getElementById('rabbitAnimation');
-        rabbitAnimation.classList.remove('hidden');
+    // ===== リアルウサギ（WebGL）疑似ライティング＋横切り =====
+    let rabbit3D = null;
+    function initRabbitWebGL() {
+        if (rabbit3D) return;
+        const canvas = document.getElementById('rabbitCanvas');
+        const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+        renderer.setSize(window.innerWidth, window.innerHeight);
         
-        // ウサギが逃げ終わったら落下エフェクト
-        setTimeout(() => {
-            showFallingAnimation();
-        }, 3000);
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 100);
+        camera.position.z = 2.2;
+        
+        const plane = new THREE.PlaneGeometry(1.4, 1.4);
+        const texLoader = new THREE.TextureLoader();
+        let texture = null;
+        // rabbit.jpeg（ルート）→ images/rabbit.png → image.png の順でロードを試行
+        function loadTextureSequential(urls, onDone) {
+            let idx = 0;
+            const tryNext = () => {
+                if (idx >= urls.length) {
+                    onDone && onDone(null);
+                    return;
+                }
+                const url = urls[idx++];
+                texture = texLoader.load(
+                    url,
+                    () => {
+                        material.uniforms.uMap.value = texture;
+                        if (texture.image && texture.image.width) {
+                            material.uniforms.uTexelSize.value.set(1 / texture.image.width, 1 / texture.image.height);
+                        }
+                        onDone && onDone(texture);
+                    },
+                    undefined,
+                    () => {
+                        tryNext();
+                    }
+                );
+                texture.minFilter = THREE.LinearFilter;
+                texture.magFilter = THREE.LinearFilter;
+                texture.wrapS = texture.wrapT = THREE.ClampToEdgeWrapping;
+            };
+            tryNext();
+        }
+        loadTextureSequential(['rabbit.jpeg', 'images/rabbit.png', 'image.png']);
+        texture.minFilter = THREE.LinearFilter;
+        texture.magFilter = THREE.LinearFilter;
+        texture.wrapS = texture.wrapT = THREE.ClampToEdgeWrapping;
+        
+        const material = new THREE.ShaderMaterial({
+            uniforms: {
+                uMap: { value: texture },
+                uLightDir: { value: new THREE.Vector3(0.3, 0.2, 1).normalize() },
+                uTexelSize: { value: new THREE.Vector2(1 / 1024, 1 / 1024) },
+                uBump: { value: 1.8 },
+                uAmbient: { value: 0.45 }
+            },
+            vertexShader: `
+                varying vec2 vUv;
+                void main(){
+                    vUv = uv;
+                    gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+                }
+            `,
+            fragmentShader: `
+                precision highp float;
+                uniform sampler2D uMap;
+                uniform vec3 uLightDir;
+                uniform vec2 uTexelSize;
+                uniform float uBump;
+                uniform float uAmbient;
+                varying vec2 vUv;
+                
+                float luminance(vec3 c){ return dot(c, vec3(0.299, 0.587, 0.114)); }
+                
+                void main(){
+                    vec4 tex = texture2D(uMap, vUv);
+                    // 透過PNGに対応（透明は描画しない）
+                    if (tex.a < 0.05) discard;
+                    
+                    float hL = luminance(texture2D(uMap, vUv - vec2(uTexelSize.x, 0.0)).rgb);
+                    float hR = luminance(texture2D(uMap, vUv + vec2(uTexelSize.x, 0.0)).rgb);
+                    float hD = luminance(texture2D(uMap, vUv - vec2(0.0, uTexelSize.y)).rgb);
+                    float hU = luminance(texture2D(uMap, vUv + vec2(0.0, uTexelSize.y)).rgb);
+                    
+                    float dx = (hR - hL);
+                    float dy = (hU - hD);
+                    
+                    vec3 n = normalize(vec3(-dx * uBump, -dy * uBump, 1.0));
+                    float diff = max(dot(normalize(uLightDir), n), 0.0);
+                    float lighting = uAmbient + (1.0 - uAmbient) * diff;
+                    
+                    // 軽いトーンマッピング
+                    vec3 color = tex.rgb * lighting;
+                    gl_FragColor = vec4(color, tex.a);
+                }
+            `,
+            transparent: true
+        });
+        
+        const mesh = new THREE.Mesh(plane, material);
+        scene.add(mesh);
+        
+        // テクスチャサイズに応じてテクセルサイズを更新（ロード時に実施）
+        
+        // マウスでライト方向
+        function updateLight(e){
+            const x = (e.clientX / window.innerWidth) * 2 - 1;
+            const y = (e.clientY / window.innerHeight) * 2 - 1;
+            material.uniforms.uLightDir.value.set(x, -y, 1).normalize();
+        }
+        if (!prefersReduced) {
+            window.addEventListener('mousemove', updateLight, { passive: true });
+        }
+        
+        // リサイズ
+        window.addEventListener('resize', () => {
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+        });
+        
+        rabbit3D = { renderer, scene, camera, mesh, material, prefersReduced, canvas };
+    }
+    
+    function runRabbitCrossingOnce() {
+        initRabbitWebGL();
+        const ctx = rabbit3D;
+        const canvas = ctx.canvas;
+        canvas.classList.remove('hidden');
+        
+        let start = null;
+        const duration = ctx.prefersReduced ? 1200 : 2400;
+        const startX = -1.6;
+        const endX = 1.6;
+        const startY = -0.1;
+        const amp = ctx.prefersReduced ? 0.02 : 0.08;
+        
+        function easeInOutCubic(t){ return t < 0.5 ? 4*t*t*t : 1 - Math.pow(-2*t + 2, 3)/2; }
+        
+        function frame(ts){
+            if (!start) start = ts;
+            const t = Math.min(1, (ts - start) / duration);
+            const e = easeInOutCubic(t);
+            // 位置更新（横切り＋わずかな上下）
+            ctx.mesh.position.x = startX + (endX - startX) * e;
+            ctx.mesh.position.y = startY + Math.sin(t * 6.283) * amp;
+            
+            ctx.renderer.render(ctx.scene, ctx.camera);
+            
+            if (t < 1){
+                requestAnimationFrame(frame);
+            } else {
+                // 演出終了
+                canvas.classList.add('hidden');
+                // 旧CSSウサギは表示しないためスキップし、落下へ
+                showFallingAnimation();
+            }
+        }
+        
+        // レンダリングループ（クロッシング中のみ）
+        requestAnimationFrame(frame);
     }
 
     // 落下エフェクト
@@ -127,6 +282,9 @@ document.addEventListener('DOMContentLoaded', function() {
             // Three.jsとダンシングウサギを初期化
             initThreeJS();
             addDancingRabbits();
+            
+            // 本のページを2枚だけ自動でめくる
+            startBookAutoFlip(2);
         }, 3000);
     }
 
@@ -783,3 +941,32 @@ document.addEventListener('DOMContentLoaded', function() {
     console.log('%c🎩 Welcome to Wonderland 🐇', 'font-size: 18px; color: #8B0000; font-weight: bold; background: #f5f5dc; padding: 10px;');
     console.log('%c隠しコマンド: ↑↑↓↓ で白ウサギが登場！', 'font-size: 14px; color: #2d2d2d;');
 });
+
+// ===========================
+// 本の自動ページめくり
+// ===========================
+function startBookAutoFlip(count = 2) {
+    const pages = document.querySelectorAll('#book .book .page:not(.cover)');
+    if (!pages.length) return;
+    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const d = prefersReduced ? 300 : 900;
+    
+    let turned = 0;
+    pages.forEach((page, i) => {
+        if (turned >= count) return;
+        setTimeout(() => {
+            page.classList.add('turn');
+        }, i * (d + 150));
+        turned++;
+    });
+    
+    // カバー風の演出：フロントカバーを軽く動かす（任意）
+    const front = document.querySelector('#book .page.cover.front');
+    if (front && !prefersReduced) {
+        setTimeout(() => {
+            front.style.transition = 'transform .6s ease';
+            front.style.transform = 'rotateY(-6deg)';
+            setTimeout(() => { front.style.transform = 'rotateY(0deg)'; }, 600);
+        }, 200);
+    }
+}

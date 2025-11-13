@@ -246,6 +246,30 @@ body {
     transform: rotateY(120deg);
 }
 
+/* 鍵穴（中央配置） */
+.door-container .keyhole {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 90px;
+    height: 145px;
+    transform: translate(-50%, -50%);
+    z-index: 4;
+    filter: drop-shadow(0 0 10px rgba(255, 240, 200, 0.8)) drop-shadow(0 0 25px rgba(255, 215, 0, 0.25));
+    opacity: 0.95;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    .door-container .keyhole {
+        animation: keyholePulse 2.2s ease-in-out infinite;
+    }
+}
+
+@keyframes keyholePulse {
+    0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.9; }
+    50%      { transform: translate(-50%, -50%) scale(1.05); opacity: 1; }
+}
+
 /* ドアの中の豪華な世界 */
 .door-inner-world {
     position: absolute;
@@ -662,6 +686,72 @@ body {
     height: 100%;
     pointer-events: none;
     z-index: 5;
+}
+
+/* ウサギ横切り用キャンバス */
+.rabbit-canvas {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 17000; /* ドアやウサギ演出の上に */
+}
+
+.rabbit-canvas.hidden {
+    display: none;
+}
+
+/* ====================
+   本のページめくり
+   ==================== */
+#book {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 40px 0 60px;
+}
+
+.book {
+    position: relative;
+    width: min(80vw, 900px);
+    height: clamp(260px, 60vh, 560px);
+    perspective: 1600px;
+}
+
+.book .page {
+    position: absolute;
+    inset: 0;
+    background: #fff;
+    background-image: linear-gradient(90deg, rgba(0,0,0,0.05) 0, transparent 20%), linear-gradient(#f7f2e7, #fff);
+    border: 1px solid rgba(0,0,0,0.25);
+    transform-origin: left;
+    transform: rotateY(0);
+    transition: transform .9s ease, box-shadow .9s ease;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+}
+
+.book .page.cover.front,
+.book .page.cover.back {
+    background: linear-gradient(#f5e9d0, #f0e2c6);
+    border: 2px solid #000;
+}
+
+.book .page.cover.front {
+    z-index: 5;
+}
+
+.book .page[data-i="1"] { z-index: 4; }
+.book .page[data-i="2"] { z-index: 3; }
+.book .page.cover.back { z-index: 1; transform-origin: right; }
+
+.book .page.turn {
+    transform: rotateY(-180deg);
+    box-shadow: -20px 0 40px rgba(0,0,0,.35);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .book .page { transition: none; }
 }
 
 /* ==================== 
