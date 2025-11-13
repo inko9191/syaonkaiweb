@@ -266,7 +266,7 @@ body {
 
 .image-doors .door-left::before,
 .image-doors .door-right::before {
-    z-index: 1; /* ノブを画像の上に表示 */
+    display: none; /* 画像ドアではノブを非表示 */
 }
 
 /* 画像ドア時は外枠を消す */
