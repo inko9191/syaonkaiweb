@@ -203,6 +203,10 @@ body {
     width: 50%;
     height: 100%;
     background: linear-gradient(to right, #654321, #8B4513, #654321);
+    /* 画像ドア（door.jpg）に差し替え。gradientはフォールバック */
+    background-image: url('door.jpg');
+    background-size: 200% 100%;
+    background-repeat: no-repeat;
     border: 3px solid #000;
     transform-origin: left center;
     transition: transform 3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
@@ -211,11 +215,13 @@ body {
 .door-left {
     left: 0;
     transform-origin: left center;
+    background-position: left center;
 }
 
 .door-right {
     right: 0;
     transform-origin: right center;
+    background-position: right center;
 }
 
 .door-left::before, .door-right::before {
